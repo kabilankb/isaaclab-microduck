@@ -1,0 +1,21 @@
+[package]
+version = "0.1.0"
+category = "simulation"
+title = "Microduck Policy Player"
+description = "Load a trained Microduck checkpoint and run it in the Isaac Sim viewport."
+authors = ["kabilankb"]
+repository = "https://github.com/kabilankb/isaaclab-microduck"
+keywords = ["isaac", "microduck", "reinforcement-learning", "policy", "newton"]
+readme = "docs/README.md"
+
+[core]
+# The extension holds a live simulation env; hot-reload would leak it.
+reloadable = false
+
+[dependencies]
+"omni.ui" = {}
+"omni.kit.uiapp" = {}
+"omni.kit.window.filepicker" = {}
+
+[[python.module]]
+name = "microduck.policy.player"
