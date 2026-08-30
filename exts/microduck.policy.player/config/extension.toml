@@ -12,10 +12,14 @@ readme = "docs/README.md"
 # The extension holds a live simulation env; hot-reload would leak it.
 reloadable = false
 
+# Minimal on purpose. The panel needs a UI toolkit and the app's update stream, and
+# nothing else. Listing an extension this Kit app does not ship makes dependency
+# resolution fail with "No versions of microduck.policy.player that satisfies", which
+# reads as if THIS extension were malformed rather than one of its dependencies being
+# absent -- `omni.kit.window.filepicker` is not present in the app play.py launches.
 [dependencies]
 "omni.ui" = {}
-"omni.kit.uiapp" = {}
-"omni.kit.window.filepicker" = {}
+"omni.kit.app" = {}
 
 [[python.module]]
 name = "microduck.policy.player"

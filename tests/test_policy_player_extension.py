@@ -56,23 +56,29 @@ def test_obs_contract_matches_the_policy_family():
     assert OBS_DIM == 61 and ACTION_DIM == 14
 
 
-def test_extension_does_not_create_the_env():
-    """SimulationContext is a singleton: an env created inside a running Kit session
-    silently discards the task's Newton config and binds to the app's context. The
-    extension must ATTACH, never gym.make."""
-    import ast
+def test_create_refuses_when_a_context_already_exists():
+    """Both modes exist, and Create must guard the singleton.
 
-    tree = ast.parse(_RUNNER_PY.read_text())
-    imported = {
-        n.module or ""
-        for n in ast.walk(tree)
-        if isinstance(n, ast.ImportFrom)
-    } | {
-        a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names
-    }
-    # gymnasium is how you MAKE an env; attaching needs only isaaclab.envs for isinstance.
-    assert not any(m.startswith("gymnasium") for m in imported), imported
-    assert "def find_live_env" in _RUNNER_PY.read_text()
+    In a PLAIN Isaac Sim session isaaclab's SimulationContext has no instance, so
+    creating an env here is fine -- that is what makes task selection possible. Inside
+    a play.py session one already exists, and a second env would silently inherit it
+    and discard the task's Newton config, so Create must refuse rather than produce a
+    wrong-physics env.
+    """
+    src = _RUNNER_PY.read_text()
+    assert "SimulationContext.instance() is not None" in src
+    assert "Use Attach instead." in src
+
+
+def test_both_modes_are_available():
+    d = PolicyDriver()
+    assert hasattr(d, "create") and hasattr(d, "attach")
+
+
+def test_release_only_closes_an_env_we_created():
+    # Closing a play.py-owned env would kill the user's session.
+    src = _RUNNER_PY.read_text()
+    assert "_owns_env" in src
 
 
 def test_raw_checkpoint_is_rejected_with_a_useful_message():

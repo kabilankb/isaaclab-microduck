@@ -1,28 +1,21 @@
-"""Attach to a running Microduck env and hot-swap the policy driving it.
+"""Create or attach to a Microduck env and drive it with an exported policy.
 
-WHY THIS ATTACHES INSTEAD OF CREATING THE ENV
----------------------------------------------
-An earlier version of this extension called `gym.make()` itself. That cannot work.
-`SimulationContext` is a SINGLETON:
+TWO MODES, because which one works depends on where this extension is loaded:
 
-    # isaaclab/sim/simulation_context.py
-    if cls._instance is not None:
-        return cls._instance          # the cfg you passed is DISCARDED
+* **Create** -- in a plain Isaac Sim session, `isaaclab.sim.SimulationContext` has no
+  instance yet (it is Isaac Lab's OWN singleton, not a subclass of Isaac Sim's), so an
+  env built here creates its own context with the task's Newton MJWarp config. This is
+  the mode that lets you pick a task from the UI.
+* **Attach** -- inside a session started by `scripts/play.py`, an env already exists.
+  Creating a second one would hit the singleton:
 
-and `ManagerBasedEnv.__init__` builds its sim with `SimulationContext(self.cfg.sim)`.
-Inside a running Kit session a context already exists, so the env binds to the app's
-context and the task's Newton MJWarp configuration is silently ignored -- the env comes
-up on the wrong physics backend, or not at all. Isaac Lab environments must own the
-app lifecycle (`AppLauncher -> env -> loop`), which is what `scripts/play.py` does.
+      # isaaclab/sim/simulation_context.py
+      if cls._instance is not None:
+          return cls._instance      # the cfg you pass is DISCARDED
 
-So: launch the session with
+  so the task's Newton config would be silently ignored. Attach to the live one instead.
 
-    python scripts/play.py --task=<TASK>-Play-v0 --checkpoint <ckpt> --visualizer kit
-
-and enable this extension inside that Kit window. It finds the live env and lets you
-swap the policy without restarting -- which is also a rehearsal for what the real
-runtime does, hot-swapping walk / stand / trick ONNX files against one shared 61D
-observation buffer.
+Try Create first; fall back to Attach if a session is already running.
 
 Imports no `omni.*`, so it is unit-testable outside Kit.
 """
@@ -100,6 +93,46 @@ def load_policy(policy_path: str | Path, device: str = "cuda:0"):
     return policy
 
 
+def list_play_tasks() -> list[str]:
+    """Registered `-Play-v0` task ids.
+
+    Only the Play twins: they disable domain randomization and observation noise, and
+    for locomotion they pin a real forward command instead of sampling one. A randomly
+    sampled command makes a working policy look broken, because roughly 1 env in 10 is
+    told to stand still.
+    """
+    import gymnasium as gym
+
+    import isaaclab_microduck.tasks  # noqa: F401  -- registers on import
+
+    return sorted(k for k in gym.registry if "MicroDuck" in k and k.endswith("-Play-v0"))
+
+
+def create_env(task_id: str, num_envs: int = 4, device: str = "cuda:0"):
+    """Build a task env in THIS process. Only valid when no Isaac Lab env exists yet.
+
+    Raises `PolicyRunnerError` with the underlying failure, rather than swallowing it:
+    whether this works inside a given Kit app is exactly the thing worth seeing.
+    """
+    import gymnasium as gym
+
+    import isaaclab_microduck.tasks  # noqa: F401
+    from isaaclab.sim import SimulationContext
+    from isaaclab_tasks.utils.parse_cfg import parse_env_cfg
+
+    if SimulationContext.instance() is not None:
+        raise PolicyRunnerError(
+            "An Isaac Lab simulation context already exists in this process, so a new "
+            "env would silently inherit it and ignore this task's Newton config. "
+            "Use Attach instead."
+        )
+    try:
+        cfg = parse_env_cfg(task_id, device=device, num_envs=num_envs)
+        return gym.make(task_id, cfg=cfg).unwrapped
+    except Exception as exc:
+        raise PolicyRunnerError(f"Could not create '{task_id}': {exc}") from exc
+
+
 class PolicyDriver:
     """Drives an ALREADY-RUNNING env with a swappable policy."""
 
@@ -107,6 +140,7 @@ class PolicyDriver:
         self.env = None
         self.policy = None
         self._obs = None
+        self._owns_env = False
         self.steps = 0
 
     @property
@@ -116,6 +150,15 @@ class PolicyDriver:
     @property
     def is_ready(self) -> bool:
         return self.env is not None and self.policy is not None
+
+    def create(self, task_id: str, num_envs: int = 4) -> str:
+        """Build the env here and own it."""
+        self.detach()
+        self.env = create_env(task_id, num_envs=num_envs)
+        self._owns_env = True
+        self._obs = None
+        self.steps = 0
+        return f"{task_id}, {self.env.num_envs} envs, device {self.env.device}"
 
     def attach(self) -> str:
         """Find the live env. Returns a human-readable description."""
@@ -128,6 +171,7 @@ class PolicyDriver:
                 "then enable this extension inside that Kit window."
             )
         self.env = env
+        self._owns_env = False
         self._obs = None
         self.steps = 0
         return f"{type(env).__name__}, {env.num_envs} envs, device {env.device}"
@@ -157,6 +201,13 @@ class PolicyDriver:
             self.steps = 0
 
     def detach(self) -> None:
+        # Only close what we created; closing a play.py-owned env would kill its session.
+        if self._owns_env and self.env is not None:
+            try:
+                self.env.close()
+            except Exception:  # pragma: no cover - teardown is best-effort
+                pass
+        self._owns_env = False
         self.env = None
         self.policy = None
         self._obs = None
