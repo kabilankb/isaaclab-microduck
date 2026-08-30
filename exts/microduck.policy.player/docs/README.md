@@ -1,56 +1,78 @@
 # Microduck Policy Player
 
-Isaac Sim (Kit) extension: pick a trained Microduck checkpoint and watch it run in the
-viewport, without dropping to a terminal.
+Isaac Sim (Kit) extension: **attach to a running Microduck session and hot-swap the
+policy driving it**, without restarting the simulator.
 
-## Enable
+## It attaches — it does not create the environment
 
-Point Kit at this repo's `exts/` folder, then enable **Microduck Policy Player**:
+This is a hard constraint, not a design preference. `SimulationContext` is a singleton:
+
+```python
+# isaaclab/sim/simulation_context.py
+if cls._instance is not None:
+    return cls._instance          # the cfg you passed is DISCARDED
+```
+
+and `ManagerBasedEnv.__init__` builds its sim with `SimulationContext(self.cfg.sim)`.
+Inside a running Kit session a context already exists, so an env created there binds to
+the app's context and the task's **Newton MJWarp configuration is silently ignored**.
+Isaac Lab environments must own the app lifecycle (`AppLauncher -> env -> loop`).
+
+An earlier version of this extension called `gym.make()` and could not work for exactly
+that reason.
+
+## Use
+
+**1. Start the session** (this creates the env correctly, and starts Kit):
+
+```bash
+python scripts/play.py --task=Isaac-BallKick-Flat-MicroDuck-Play-v0 \
+    --checkpoint $PWD/logs/rsl_rl/microduck_ball_kick/<RUN>/model_5999.pt \
+    --num_envs=4 --visualizer kit
+```
+
+**2. Enable the extension** inside that Kit window:
 
 ```
 Window > Extensions > (gear) > Extension Search Paths > +
     /path/to/isaaclab-microduck/exts
 ```
 
-The extension imports `isaaclab_microduck`, so that package must be installed into the
-same interpreter Kit is running (`pip install -e . --no-deps`; see `SETUP.md`).
+Extension id: **`microduck.policy.player`** (shown as *Microduck Policy Player*).
 
-## Use
+**3. In the panel:** press **Attach**, enter a run directory or an
+`exported/policy.pt`, press **Load**, then **Play**.
 
-1. **Task** — only `-Play-v0` variants are listed. That is deliberate: they disable
-   domain randomization and observation noise, and for locomotion they pin a real
-   forward command instead of sampling one. With a sampled command roughly 1 in 10
-   envs is told to stand still, which makes a working policy look broken.
-2. **Exported policy** — point at either a run directory or `exported/policy.pt`.
-3. **Environments** — 1/4/9/16. Playback only; see the warning below.
-4. **Load**, then **Play**.
+## Why hot-swapping is the useful part
+
+Swapping policies against one already-running env is a rehearsal for what the real
+runtime does: it hot-swaps walk / stand / trick ONNX files against a single shared 61D
+observation buffer. Comparing two checkpoints on the same physics, without a restart
+between them, is also the honest way to A/B them.
 
 ## It wants `exported/policy.pt`, not `model_*.pt`
 
 The exported TorchScript has the **observation normalizer baked in**. A raw checkpoint
-does not, and an unnormalized policy behaves like a different robot — a failure that is
-invisible in simulation, because in-sim play applies the normalizer anyway, so it only
-appears on hardware. The extension rejects `model_*.pt` with that message rather than
-loading something that looks fine and is wrong.
-
-`scripts/play.py` writes the export on every run:
-
-```
-logs/rsl_rl/<experiment>/<run>/exported/policy.pt
-```
-
-## Do not read playback as evaluation
-
-The env counts here are for watching. The same config that converged at 4096 envs
-failed completely at 32 on this project, so small-env behaviour is not evidence about a
-policy. Use a headless run and the `Metrics/*` values for that.
+does not, and an unnormalized policy behaves like a different robot — invisible in
+simulation, because in-sim play applies the normalizer anyway, so it only appears on
+hardware. The extension rejects `model_*.pt` with that message rather than loading
+something that looks fine and is wrong.
 
 ## Layout
 
 | File | Role |
 |---|---|
-| `runner.py` | env + policy. Imports **no** `omni.*`, so it is unit-tested in ordinary CPU CI (`tests/test_policy_player_extension.py`). |
+| `runner.py` | attach + policy. Imports **no** `omni.*`, so it is unit-tested in ordinary CPU CI (`tests/test_policy_player_extension.py`, 10 tests). |
 | `extension.py` | Kit UI only. Steps from the Kit update stream — a `while` loop here would freeze the viewport it is meant to render. |
 
 Keep that split. If `runner.py` grows a Kit dependency, the only way left to test this
 extension is launching Isaac Sim by hand.
+
+## Known limits
+
+- `find_live_env()` locates the env by scanning live objects. Isaac Lab's `play.py`
+  creates it and this package has no hook into that script; a global that only our own
+  scripts set would miss exactly the case that matters. If several envs exist, the
+  first is used.
+- The UI has not been exercised inside Kit end-to-end — the runner half is tested, the
+  panel is not. Expect to iterate on it.

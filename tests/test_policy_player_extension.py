@@ -35,15 +35,14 @@ def _load_runner():
 _r = _load_runner()
 ACTION_DIM = _r.ACTION_DIM
 OBS_DIM = _r.OBS_DIM
-PolicyRunner = _r.PolicyRunner
+PolicyDriver = _r.PolicyDriver
 PolicyRunnerError = _r.PolicyRunnerError
 find_exported_policy = _r.find_exported_policy
-list_play_tasks = _r.list_play_tasks
+find_live_env = _r.find_live_env
 
 
 def test_runner_has_no_kit_dependency():
-    # The whole point of the split. If this regresses, the extension can only be
-    # tested by launching Isaac Sim, which no CI here does.
+    # If this regresses, the only way left to test the extension is launching Isaac Sim.
     src = _RUNNER_PY.read_text()
     assert "import omni" not in src and "from omni" not in src
 
@@ -57,9 +56,26 @@ def test_obs_contract_matches_the_policy_family():
     assert OBS_DIM == 61 and ACTION_DIM == 14
 
 
+def test_extension_does_not_create_the_env():
+    """SimulationContext is a singleton: an env created inside a running Kit session
+    silently discards the task's Newton config and binds to the app's context. The
+    extension must ATTACH, never gym.make."""
+    import ast
+
+    tree = ast.parse(_RUNNER_PY.read_text())
+    imported = {
+        n.module or ""
+        for n in ast.walk(tree)
+        if isinstance(n, ast.ImportFrom)
+    } | {
+        a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names
+    }
+    # gymnasium is how you MAKE an env; attaching needs only isaaclab.envs for isinstance.
+    assert not any(m.startswith("gymnasium") for m in imported), imported
+    assert "def find_live_env" in _RUNNER_PY.read_text()
+
+
 def test_raw_checkpoint_is_rejected_with_a_useful_message():
-    # A raw model_*.pt has NO baked normalizer; loading one produces a policy that
-    # behaves like a different robot, and the bug is invisible in sim.
     import tempfile
 
     with tempfile.TemporaryDirectory() as d:
@@ -87,18 +103,20 @@ def test_export_is_found_from_the_run_directory():
         assert find_exported_policy(d).name == "policy.pt"
 
 
-def test_only_play_variants_are_offered():
-    # The non-Play tasks sample random commands, which makes a working locomotion
-    # policy look broken -- roughly 1 in 10 envs is told to stand still.
-    tasks = list_play_tasks()
-    assert tasks, "no Microduck Play tasks registered"
-    assert all(t.endswith("-Play-v0") for t in tasks)
+def test_attach_without_a_running_env_explains_how_to_start_one():
+    d = PolicyDriver()
+    assert not d.is_attached
+    with pytest.raises(PolicyRunnerError, match="play.py"):
+        d.attach()
 
 
-def test_runner_starts_unloaded_and_step_is_a_noop():
-    r = PolicyRunner()
-    assert not r.is_loaded
-    r.step()          # must not raise when nothing is loaded
-    r.reset()
-    r.unload()
-    assert r.steps == 0
+def test_step_is_a_noop_when_not_ready():
+    d = PolicyDriver()
+    d.step()          # must not raise
+    d.reset()
+    d.detach()
+    assert d.steps == 0
+
+
+def test_no_live_env_in_a_bare_process():
+    assert find_live_env() is None
