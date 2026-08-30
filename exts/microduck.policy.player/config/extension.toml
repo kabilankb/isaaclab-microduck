@@ -17,9 +17,14 @@ reloadable = false
 # resolution fail with "No versions of microduck.policy.player that satisfies", which
 # reads as if THIS extension were malformed rather than one of its dependencies being
 # absent -- `omni.kit.window.filepicker` is not present in the app play.py launches.
+# Registering with the Examples Browser is what makes this discoverable -- fighting
+# `--ext-folder` was a dead end (Kit reported "Available packages: (empty)" for both
+# the `=` and space forms). The browser and base-sample extensions ship with Isaac Sim.
 [dependencies]
 "omni.ui" = {}
 "omni.kit.app" = {}
+"isaacsim.examples.browser" = {}
+"isaacsim.examples.base" = {}
 
 [[python.module]]
 name = "microduck.policy.player"

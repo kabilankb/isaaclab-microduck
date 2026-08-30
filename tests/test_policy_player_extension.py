@@ -126,3 +126,114 @@ def test_step_is_a_noop_when_not_ready():
 
 def test_no_live_env_in_a_bare_process():
     assert find_live_env() is None
+
+
+# --------------------------------------------------------------------------
+# The BaseSample path: observation assembly is the part that fails SILENTLY.
+# A wrong rotation or a wrong slot order still runs; it just behaves badly.
+# --------------------------------------------------------------------------
+
+
+def _load_sample_mod():
+    spec = importlib.util.spec_from_file_location(
+        "_microduck_sample", _EXT / "microduck" / "policy" / "player" / "sample.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_s = _load_sample_mod()
+
+
+def test_sample_has_no_kit_dependency_at_import():
+    """Scene APIs are imported INSIDE setup_scene, so the module imports bare.
+
+    Checked over the AST rather than the text: the module docstring mentions Isaac Sim
+    by name, and a substring search matches prose as readily as code.
+    """
+    import ast
+
+    tree = ast.parse((_EXT / "microduck/policy/player/sample.py").read_text())
+    top_level = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
+    names = set()
+    for n in top_level:
+        if isinstance(n, ast.ImportFrom):
+            names.add(n.module or "")
+        else:
+            names.update(a.name for a in n.names)
+    offenders = {m for m in names if m.split(".")[0] in {"omni", "isaacsim", "pxr"}}
+    assert not offenders, offenders
+
+
+def test_observation_width_matches_the_shared_contract():
+    assert _s.OBS_DIM == 61
+    assert _s.ACTION_DIM == 14
+    assert _s.COMMAND_DIM == 13
+    # 3 + 3 + 14 + 14 + 14 + 13 == 61: the layout must actually add up.
+    assert 3 + 3 + _s.ACTION_DIM * 3 + _s.COMMAND_DIM == _s.OBS_DIM
+
+
+def test_identity_rotation_is_a_no_op():
+    import numpy as np
+
+    v = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+    out = _s._rotate_inverse(np.array([1.0, 0.0, 0.0, 0.0], dtype=np.float32), v)
+    assert np.allclose(out, v, atol=1e-6)
+
+
+def test_gravity_points_down_when_upright():
+    import numpy as np
+
+    # Upright robot: projected gravity must be (0, 0, -1).
+    g = _s._rotate_inverse(
+        np.array([1.0, 0.0, 0.0, 0.0], dtype=np.float32),
+        np.array([0.0, 0.0, -1.0], dtype=np.float32),
+    )
+    assert np.allclose(g, [0.0, 0.0, -1.0], atol=1e-6)
+
+
+def test_yaw_rotation_leaves_gravity_untouched():
+    import math
+
+    import numpy as np
+
+    # Yaw must not tilt gravity -- if it does, the rotation is wrong.
+    a = math.pi / 3
+    quat = np.array([math.cos(a / 2), 0.0, 0.0, math.sin(a / 2)], dtype=np.float32)
+    g = _s._rotate_inverse(quat, np.array([0.0, 0.0, -1.0], dtype=np.float32))
+    assert np.allclose(g, [0.0, 0.0, -1.0], atol=1e-5), g
+
+
+def test_pitch_rotation_tilts_gravity_into_x():
+    import math
+
+    import numpy as np
+
+    # 90 deg pitch about y: body-frame gravity moves out of z into x.
+    a = math.pi / 2
+    quat = np.array([math.cos(a / 2), 0.0, math.sin(a / 2), 0.0], dtype=np.float32)
+    g = _s._rotate_inverse(quat, np.array([0.0, 0.0, -1.0], dtype=np.float32))
+    assert abs(abs(g[0]) - 1.0) < 1e-5 and abs(g[2]) < 1e-5, g
+
+
+def test_observation_is_zeros_before_a_robot_exists():
+    import numpy as np
+
+    smp = _s.MicroduckPolicySample()
+    obs = smp.build_observation()
+    assert obs.shape == (_s.OBS_DIM,) and np.all(obs == 0)
+
+
+def test_forward_command_writes_the_twist_x_slot():
+    # Slot 0 is the same one the deployment runtime writes for walking.
+    smp = _s.MicroduckPolicySample()
+    smp.set_forward_command(0.7)
+    assert smp._command[0] == pytest.approx(0.7)
+    assert smp._command[1:].sum() == 0.0
+
+
+def test_step_policy_is_a_noop_without_policy_or_robot():
+    smp = _s.MicroduckPolicySample()
+    assert smp.step_policy() is None
