@@ -2,7 +2,7 @@
 """Evaluate a Microduck checkpoint with Isaac Lab's RSL-RL play entry point.
 
     python scripts/play.py --task=Isaac-Velocity-Flat-MicroDuck-v0 \
-        --checkpoint <path/to/model_XXXX.pt> --num_envs=16 physics=newton_mjwarp
+        --checkpoint <path/to/model_XXXX.pt> --num_envs=16
 
 For RSL-RL, ``play.py`` also exports the policy to TorchScript and ONNX under the
 checkpoint's ``exported/`` directory. That export is NOT the sim2real hand-off:

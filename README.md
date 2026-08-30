@@ -63,20 +63,44 @@ $PY -m pip install -e . --no-deps      # Isaac Lab/Sim/torch already provisioned
 `$ISAACLAB_PATH`, and letting pip re-resolve them fights that install. `pyproject.toml`
 documents the pinned versions this port was developed against.
 
-## Physics: Newton MJWarp
+## Physics: where Newton enters
 
-Every task runs on **Newton** with the MuJoCo-Warp solver, configured in the env cfg
-itself (`SimulationCfg(physics=NewtonCfg(solver_cfg=MJWarpSolverCfg(...)))`) at 200 Hz
-physics / 50 Hz control. Newton is what makes this a like-for-like port of the mjlab
-(MuJoCo Warp) recipes rather than a re-tune against a different contact model.
+Newton is a **dependency, not vendored code** — it arrives with Isaac Lab
+(`isaaclab_newton`) and is installed per [SETUP.md](SETUP.md). It touches this package
+in exactly four places, and it is worth knowing all four before changing any of them:
 
-Do **not** pass `physics=newton_mjwarp` on the command line. Isaac Lab's preset
-selector rejects unknown presets, and these cfgs configure Newton directly, so the
-flag is both redundant and fatal:
+| Where | What it does |
+|---|---|
+| `tasks/velocity/velocity_env_cfg.py` | **the one that matters** — `SimulationCfg(physics=NewtonCfg(solver_cfg=MJWarpSolverCfg(iterations=10, ls_iterations=20)))`. Every task inherits this cfg, so this single line is what makes the whole package run on Newton. |
+| `utils/arrays.py` | `as_torch()`. Under Newton, `ArticulationData` / `RigidObjectData` / sensor data are **not** plain torch tensors, so every MDP term that reads sim state goes through this bridge. |
+| `scripts/convert_assets.py` | Newton builds its physics model from USD (`ModelBuilder.add_usd`), so the MJCFs must be converted first. This is why USD exists here at all. |
+| `scripts/check_asset_parity.py` | builds its own Newton `SimulationCfg` to A/B the converted asset against MuJoCo ground truth. |
+
+Timing is 200 Hz physics / 50 Hz control (`decimation=4`), matching the mjlab recipes.
+Running the same MuJoCo-Warp solver is the point: it makes this a like-for-like port of
+behaviours proven in mjlab rather than a re-tune against a different contact model.
+
+### Do not pass `physics=newton_mjwarp`
+
+The cfgs configure Newton **directly**, so the CLI preset is redundant — and Isaac Lab's
+preset selector rejects unknown preset names outright:
 
 ```
 ValueError: Unknown preset(s): newton_mjwarp
 ```
+
+That kills the run before iteration 0. Isaac Lab's own docs and older Microduck notes
+show this flag; it does not apply here.
+
+### Newton vs the Newton *viewer*
+
+Two different things that share a name, and confusing them costs debugging time:
+
+- **Newton the physics backend** — always on, headless or not.
+- **`--visualizer newton`** — Newton's own OpenGL window. Optional, and it draws from
+  Newton's internal shape transforms rather than from USD. A USD-side bug can therefore
+  look fine there and broken in Kit/RTX, which is exactly how the nested-rigid-body bug
+  in `convert_assets.py` stayed hidden (see `docs/02_assets.md`).
 
 ## Usage
 

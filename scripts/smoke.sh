@@ -59,9 +59,11 @@ for model in walk_backlash allcollisions_backlash rollers_backlash; do
     || echo "   still failing as expected"
 done
 
+# Do NOT pass `physics=newton_mjwarp`: the env cfgs configure Newton directly, and
+# Isaac Lab's preset selector rejects unknown presets before iteration 0.
 step "training smoke (16 envs, 5 iters)" \
-  "$PY" "$HERE/train.py" --task=Isaac-Scaffold-MicroDuck-v0 \
-  --num_envs=16 --max_iterations=5 physics=newton_mjwarp --headless || true
+  "$PY" "$HERE/train.py" --task=Isaac-Velocity-Flat-MicroDuck-v0 \
+  --num_envs=16 --max_iterations=5 --headless || true
 
 echo
 echo "──────────────────────────────────────────────────────────────"

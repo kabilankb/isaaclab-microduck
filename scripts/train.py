@@ -2,7 +2,7 @@
 """Train a Microduck task with Isaac Lab's RSL-RL entry point.
 
     python scripts/train.py --task=Isaac-Velocity-Flat-MicroDuck-v0 \
-        --num_envs=64 --max_iterations=5 physics=newton_mjwarp --headless
+        --num_envs=64 --max_iterations=5 --headless
 
 All flags are Isaac Lab's own; this only registers the Microduck tasks first.
 Checkpoints land under the EXPERIMENT NAME, not the task ID:
