@@ -8,8 +8,7 @@ Isaac Lab port of the mjlab stack that lives alongside it; **mjlab remains the
 behavioural baseline** every ported task is A/B'd against.
 
 
-https://github.com/user-attachments/assets/cf405f24-e72d-4768-9017-d1ea9c43c6e4
-
+https://github.com/user-attachments/assets/d655276c-f835-48e9-ac5d-02ef88d72ec7
 
 ## Tasks
 
@@ -96,6 +95,11 @@ That kills the run before iteration 0. Isaac Lab's own docs and older Microduck 
 show this flag; it does not apply here.
 
 ### Newton vs the Newton *viewer*
+
+
+
+https://github.com/user-attachments/assets/41519e74-fd1f-499a-b684-2e4ecb676490
+
 
 Two different things that share a name, and confusing them costs debugging time:
 
