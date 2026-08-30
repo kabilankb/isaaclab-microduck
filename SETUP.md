@@ -6,23 +6,58 @@ Python 3.12.
 
 ## 1. Requirements
 
-| Component | Version | Notes |
+| Component | Minimum | Notes |
 |---|---|---|
-| OS | Linux x86_64 | Isaac Sim 6.0.1 has no aarch64 wheel |
-| GPU | NVIDIA, >= 8 GB | 4096 envs of the two-duck tasks used ~6 GB |
-| Driver / CUDA | >= 535, CUDA 12.8+ | developed on driver 595.84 / CUDA 13.2 |
+| OS | Linux x86_64 | Isaac Sim 6.0.1 ships no aarch64 wheel |
+| GPU | NVIDIA, >= 8 GB VRAM | 4096 envs of the two-duck tasks peaked at ~6.5 GB |
+| Driver | >= 535 | needs CUDA 12.8+ runtime support |
+| RAM | >= 32 GB | Isaac Sim alone is heavy before any envs exist |
+| Disk | ~40 GB | Isaac Sim + extension cache dominate; USD build adds ~1 GB |
 | Python | **3.12 only** | Isaac Lab 3.0 / Isaac Sim 6.0.1 are 3.12-exclusive |
 
-Pinned versions this port was developed against:
+### Reference system
 
-```
-Isaac Lab 3.0.0 (v3.0.0-beta2.patch1)   isaacsim 6.0.1.0     torch 2.10.0+cu128
-newton 1.2.1    mujoco-warp 3.8.0.3     warp-lang 1.13.0     rsl-rl-lib 5.0.1
-better-actuator-models 1.0.1 (Rhoban/bam@mjlab_frictionloss)
-```
+Everything in this repo was developed and measured on this machine. Numbers quoted
+elsewhere (throughput, VRAM, iteration times) come from here — treat them as a
+reference point, not a spec.
 
-Isaac Lab 3.0.0-beta2 is a **pre-release** paired with Isaac Sim 6.0.1. It works, but
-re-verify the pairing before upgrading either.
+| | |
+|---|---|
+| OS | Ubuntu 24.04.4 LTS, kernel 7.0.0-30-generic, x86_64 |
+| CPU | Intel Core Ultra 9 285HX — 24 cores / 24 threads |
+| RAM | 125 GiB |
+| GPU | NVIDIA RTX PRO 5000 Blackwell Generation Laptop GPU, 24 GB |
+| Driver / CUDA | 595.84 / CUDA 13.2 |
+| Disk | 1.9 TB NVMe |
+
+Measured on that machine: **~1.3 s/iteration at 4096 envs headless** for the
+single-robot tasks (~106k env-steps/s), ~1.6-2.4 s/iteration for the two-robot tasks,
+and **3.3-6.5 GB VRAM**. A 6000-iteration run takes 1.5-3 hours.
+
+### Verified software versions
+
+Read live from the working environment, not copied from release notes:
+
+| Package | Version |
+|---|---|
+| Python | 3.12.14 |
+| isaacsim | 6.0.1.0 |
+| isaaclab | 6.1.17 (repo `v3.0.0-beta2.patch1-18-g72cb3826d`) |
+| isaaclab_tasks / isaaclab_rl / isaaclab_newton | 1.10.9 / 0.5.7 / 0.13.6 |
+| newton | 1.2.1 |
+| mujoco-warp | 3.8.0.3 |
+| warp-lang | 1.13.0 |
+| mujoco | 3.8.0 |
+| torch | 2.10.0+cu128 (CUDA build 12.8) |
+| rsl-rl-lib | 5.0.1 |
+| better-actuator-models (imports as `bam`) | 1.0.1 |
+| gymnasium / numpy | 1.2.1 / 2.3.1 |
+
+Two things worth noting about that table. **torch is built against CUDA 12.8 while the
+driver reports CUDA 13.2** — that is fine, the driver is backward compatible, and it is
+the pairing that was actually tested. And **Isaac Lab 3.0.0-beta2 is a pre-release**
+paired with Isaac Sim 6.0.1; it works, but re-verify the pairing before upgrading
+either, since the two version lines move together.
 
 ## 2. Create the environment
 
