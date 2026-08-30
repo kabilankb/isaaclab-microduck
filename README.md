@@ -63,64 +63,171 @@ $PY -m pip install -e . --no-deps      # Isaac Lab/Sim/torch already provisioned
 `$ISAACLAB_PATH`, and letting pip re-resolve them fights that install. `pyproject.toml`
 documents the pinned versions this port was developed against.
 
-## Commands
+## Physics: Newton MJWarp
 
-**Everything at once** — run this before any long training job:
+Every task runs on **Newton** with the MuJoCo-Warp solver, configured in the env cfg
+itself (`SimulationCfg(physics=NewtonCfg(solver_cfg=MJWarpSolverCfg(...)))`) at 200 Hz
+physics / 50 Hz control. Newton is what makes this a like-for-like port of the mjlab
+(MuJoCo Warp) recipes rather than a re-tune against a different contact model.
 
-```bash
-./scripts/smoke.sh          # full chain (needs the GPU, a few minutes)
-./scripts/smoke.sh --cpu    # CPU-only gates (seconds, no simulator)
+Do **not** pass `physics=newton_mjwarp` on the command line. Isaac Lab's preset
+selector rejects unknown presets, and these cfgs configure Newton directly, so the
+flag is both redundant and fatal:
+
+```
+ValueError: Unknown preset(s): newton_mjwarp
 ```
 
-Individual steps:
+## Usage
+
+All commands run under the Isaac Lab interpreter. Set it once:
 
 ```bash
-# Assets (P2) — rebuild after any MJCF change
-$PY scripts/dump_mjcf_reference.py           # MuJoCo ground truth -> assets/reference/*.json
-$PY scripts/convert_assets.py --force        # MJCF -> USD (needs Isaac Sim)
-$PY scripts/check_asset_parity.py --model walk   # parity + settle gate (needs a GPU)
-
-$PY scripts/list_envs.py                     # what this package registers (no sim launch)
-$PY scripts/train.py --task=<TASK> --num_envs=64 --max_iterations=5 \
-      physics=newton_mjwarp --headless       # SMOKE TEST — always run first
-$PY scripts/play.py  --task=<TASK> --checkpoint <model_XXXX.pt> physics=newton_mjwarp
-$PY -m pytest tests/
+PY=$(which python)           # inside the activated env_isaaclab
+cd isaaclab-microduck
 ```
 
-`train.py` / `play.py` are thin wrappers: they register the Microduck tasks through
-Isaac Lab's supported `--external_callback` hook and exec Isaac Lab's own scripts, so
-every upstream flag works unchanged. Isaac Lab is **not** forked or edited.
+### 1. List the environments
 
-**To look at the robot itself** (no Microduck task exists until P5):
+The live registry — take task ids from here, never from memory. Launches no simulator.
 
 ```bash
-DISPLAY=:1 $PY scripts/view_robot.py --visualizer newton
-DISPLAY=:1 $PY scripts/view_robot.py --model rollers --num-envs 4 --drop 0.25 --visualizer newton
+$PY scripts/list_envs.py
 ```
 
-**Keyboard teleop** of the joint targets (run in a real terminal — keys come from the
-TTY, not the viewer window, so it works under any visualizer and over SSH):
+```
+Isaac-Velocity-Flat-MicroDuck-v0        Isaac-Velocity-Flat-MicroDuck-Play-v0
+Isaac-Running-Flat-MicroDuck-v0         Isaac-Running-Flat-MicroDuck-Play-v0
+Isaac-BallKick-Flat-MicroDuck-v0        Isaac-BallKick-Flat-MicroDuck-Play-v0
+Isaac-BallRally-Flat-MicroDuck-v0       Isaac-BallRally-Flat-MicroDuck-Play-v0
+Isaac-RunParallel-Flat-MicroDuck-v0     Isaac-RunParallel-Flat-MicroDuck-Play-v0
+```
+
+### 2. Train
+
+**Always smoke-test first.** 5 iterations at 64 envs takes seconds and catches most
+config errors — a missing term, a wrong joint selector, a NaN — for almost nothing.
 
 ```bash
-DISPLAY=:1 $PY scripts/view_robot.py --visualizer newton --teleop
+$PY scripts/train.py --task=Isaac-BallKick-Flat-MicroDuck-v0 \
+      --num_envs=64 --max_iterations=5 --headless
 ```
 
-`i/k j/l u/o n/m` head · `w/s` squat · `a/d` lean · `[ ]` select joint · arrows nudge ·
-`r` reset · `q` quit. This drives joint targets, **not** a policy — teleoping a walking
-robot needs the velocity task (P5) plus a trained checkpoint.
-
-**To watch training in a GUI**, drop `--headless` and add a visualizer (`kit`, `newton`,
-`rerun`, `viser`):
+Then the real run. Episodic tricks converge in ~1000-2000 iterations; gaits and
+curriculum-heavy tasks want 4000-6000.
 
 ```bash
-DISPLAY=:1 $PY scripts/train.py --task=<TASK> --num_envs=16 --max_iterations=400 \
-      physics=newton_mjwarp --visualizer newton
+$PY scripts/train.py --task=Isaac-BallKick-Flat-MicroDuck-v0 \
+      --num_envs=4096 --max_iterations=6000 --headless
 ```
 
-Keep `--num_envs` small when rendering; train for real headless at 4096.
+Resume from a checkpoint:
 
-`physics=newton_mjwarp` selects the Newton MuJoCo-Warp solver — the same solver family
-mjlab uses, which is why the port targets it.
+```bash
+$PY scripts/train.py --task=<TASK> --num_envs=4096 --max_iterations=6000 --headless \
+      --resume --load_run 2026-08-29_11-14-48 --checkpoint model_5999.pt
+```
+
+**Use 4096 envs for anything you intend to believe.** Small-env runs are for watching:
+the same config that converged at 4096 failed completely at 32 here, so treat
+small-batch numbers as unusable for conclusions.
+
+### 3. Play a trained policy
+
+Use the `-Play-v0` twin — it disables domain randomization and observation noise, and
+for locomotion it pins a real forward command instead of sampling one (a randomly
+sampled command makes a working policy look broken, because some envs are told to
+stand still).
+
+```bash
+$PY scripts/play.py --task=Isaac-BallKick-Flat-MicroDuck-Play-v0 \
+      --checkpoint $PWD/logs/rsl_rl/microduck_ball_kick/<RUN>/model_5999.pt \
+      --num_envs=4 --visualizer kit,newton,rerun
+```
+
+### 4. Inference / export
+
+`play.py` writes TorchScript and ONNX to `<run>/exported/` on every run, with the
+**observation normalizer baked in**:
+
+```
+logs/rsl_rl/<experiment>/<run>/exported/policy.pt         # TorchScript
+logs/rsl_rl/<experiment>/<run>/exported/policy.onnx       # ONNX graph
+logs/rsl_rl/<experiment>/<run>/exported/policy.onnx.data  # ONNX EXTERNAL WEIGHTS
+```
+
+**Copy `policy.onnx.data` alongside `policy.onnx`.** The weights are stored
+externally (the `.onnx` is ~14 KB, the `.data` ~790 KB), so shipping the graph alone
+silently produces a policy with no weights.
+
+Load it standalone — 61 observations in, 14 joint targets out:
+
+```python
+import torch
+policy = torch.jit.load("exported/policy.pt").eval()
+actions = policy(torch.zeros(1, 61))        # -> (1, 14)
+```
+
+`onnxruntime` is declared in `pyproject.toml` but the `--no-deps` install does not
+install it; `pip install onnxruntime` separately if you want to validate the ONNX.
+
+**Never hand-convert a raw checkpoint.** Observation normalization is on, and an
+unnormalized policy behaves like a different robot — a bug that is invisible in sim,
+because in-sim play applies the normalizer anyway.
+
+This is also how the two-duck tasks drive their second robot: `BallRally` and
+`RunParallel` load an exported `policy.pt` as a frozen partner
+(`tasks/frozen_partner_env.py`), which is what keeps them single-agent and the actor
+observation at 61D.
+
+### 5. Visualizers
+
+```bash
+--headless                            # no rendering; use this to train
+--visualizer rerun                    # browser viewer, most reliable here, time scrubbing
+--visualizer newton                   # Newton's own OpenGL window, light
+--visualizer kit                      # full Omniverse RTX, heaviest, slow to boot
+--visualizer kit,newton,rerun         # comma-separated, no spaces
+--max_visible_envs 9                  # cap what is drawn in a large run
+```
+
+Rerun prints a `http://127.0.0.1:9090/...` URL. **Two Rerun-enabled runs clash**: the
+second binds nothing but still prints a URL, so verify with `ss -ltn | grep 9090`.
+
+### 6. Look at the robot without a policy
+
+```bash
+$PY scripts/view_robot.py --visualizer newton                 # holds HOME, prints z and tilt
+$PY scripts/view_robot.py --model rollers --num-envs 4 --drop 0.25 --visualizer newton
+$PY scripts/view_robot.py --visualizer newton --teleop        # keyboard joint teleop
+```
+
+Teleop reads the **TTY**, not the viewer window, so run it in a real terminal; it works
+headless and over SSH. Actuation there is the conversion-check PD, not BAM.
+
+### 7. Everything at once
+
+```bash
+./scripts/smoke.sh --cpu    # seconds, no GPU: cfg tests, registration, reference dump
+./scripts/smoke.sh          # minutes: + asset parity + a real training run
+$PY -m pytest tests/        # 149 cfg-invariant tests, CPU only
+```
+
+## Where things land
+
+Runs are keyed by **experiment name, not task id** — `Isaac-BallKick-Flat-MicroDuck-v0`
+writes to `logs/rsl_rl/microduck_ball_kick/<timestamp>/`. Any automation must assert on
+the experiment-name path.
+
+```
+logs/rsl_rl/<experiment>/<timestamp>/
+    model_*.pt          checkpoints (every 250 iterations)
+    exported/           TorchScript + ONNX, normalizer baked in
+    params/             the resolved cfg for this run
+```
+
+Override the root with `MICRODUCK_ISAACLAB_LOG_ROOT`.
+
 
 ## Traps
 
