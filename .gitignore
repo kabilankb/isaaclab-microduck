@@ -1,0 +1,25 @@
+# USD is a BUILD ARTIFACT - regenerate with scripts/convert_assets.py, never commit.
+# (assets/reference/*.json IS committed: it is the MuJoCo ground truth a diff should show.)
+# assets/mjcf/ IS committed: vendored robot sources are what make this repo standalone.
+isaaclab_microduck/assets/usd/
+
+# Training output
+logs/
+wandb/
+outputs/
+*.pt
+*.onnx
+*.onnx.data
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Editor / sim scratch
+imgui.ini
+.vscode/
+.idea/

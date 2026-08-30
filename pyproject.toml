@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isaaclab-microduck"
+version = "0.1.0"
+description = "Isaac Lab (Newton MJWarp) training environments for the Microduck robot"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+# Isaac Lab 3.0 / Isaac Sim 6.0.1 are Python 3.12 only.
+requires-python = ">=3.12, <3.13"
+
+# Install with `pip install -e . --no-deps` -- see SETUP.md.
+#
+# `--no-deps` is deliberate, not an oversight: Isaac Lab and Isaac Sim are editable
+# source installs, and letting pip re-resolve them fights that install. The list below
+# DOCUMENTS what the package needs and pins the versions this port was developed
+# against; it is not meant to be resolved.
+dependencies = [
+    "isaaclab==6.1.17",
+    "isaaclab_tasks==1.10.9",
+    "isaaclab_rl==0.5.7",
+    "isaaclab_newton==0.13.6",
+    "isaacsim==6.0.1.0",
+    "newton==1.2.1",
+    "mujoco-warp==3.8.0.3",
+    "warp-lang==1.13.0",
+    "torch==2.10.0",
+    "rsl-rl-lib==5.0.1",
+    # BAM distribution name is `better-actuator-models`; the import stays `bam`.
+    # Base install only - the `identification` extra drags in the broken zmq==0.0.0
+    # stub and protobuf<4, and the `mjlab` extra pins warp-lang<1.13 / mujoco-warp<3.8,
+    # both of which conflict with this environment.
+    "better-actuator-models",
+    # Reading the source MJCFs (joint order / site offsets) at asset-build time.
+    "mujoco",
+    "onnxruntime",
+]
+
+[tool.setuptools.packages.find]
+include = ["isaaclab_microduck*"]
+
+[tool.ruff]
+indent-width = 4

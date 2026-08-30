@@ -1,0 +1,3669 @@
+{
+  "model": "rollers",
+  "mjcf": "robot_allcollisions_rollers.xml",
+  "mujoco_version": "3.8.0",
+  "counts": {
+    "nbody": 20,
+    "njnt": 19,
+    "nq": 25,
+    "nv": 24,
+    "nu": 14,
+    "ngeom": 89,
+    "nsite": 7
+  },
+  "total_mass": 0.73682962,
+  "servo_joints": [
+    "left_hip_yaw",
+    "left_hip_roll",
+    "left_hip_pitch",
+    "left_knee",
+    "left_ankle",
+    "neck_pitch",
+    "head_pitch",
+    "head_yaw",
+    "head_roll",
+    "right_hip_yaw",
+    "right_hip_roll",
+    "right_hip_pitch",
+    "right_knee",
+    "right_ankle"
+  ],
+  "passive_joints": [
+    "passive_LF_wheel",
+    "passive_LR_wheel",
+    "passive_RF_wheel",
+    "passive_RR_wheel"
+  ],
+  "joints": [
+    {
+      "name": "trunk_base_freejoint",
+      "type": "free",
+      "body": "trunk_base",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 0,
+      "dof_adr": 0,
+      "armature": 0.0,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    },
+    {
+      "name": "left_hip_yaw",
+      "type": "hinge",
+      "body": "yaw2roll",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.436332313,
+        0.523598776
+      ],
+      "qpos_adr": 7,
+      "dof_adr": 6,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "left_hip_roll",
+      "type": "hinge",
+      "body": "hip_l",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.383972435,
+        0.383972435
+      ],
+      "qpos_adr": 8,
+      "dof_adr": 7,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "left_hip_pitch",
+      "type": "hinge",
+      "body": "upper_leg_left",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 9,
+      "dof_adr": 8,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "left_knee",
+      "type": "hinge",
+      "body": "leg",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 10,
+      "dof_adr": 9,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "left_ankle",
+      "type": "hinge",
+      "body": "ankle_l_v1",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 11,
+      "dof_adr": 10,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "passive_LF_wheel",
+      "type": "hinge",
+      "body": "tire",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 12,
+      "dof_adr": 11,
+      "armature": 0.0001,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    },
+    {
+      "name": "passive_LR_wheel",
+      "type": "hinge",
+      "body": "tire_2",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 13,
+      "dof_adr": 12,
+      "armature": 0.0001,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    },
+    {
+      "name": "neck_pitch",
+      "type": "hinge",
+      "body": "neck",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.047197551
+      ],
+      "qpos_adr": 14,
+      "dof_adr": 13,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "head_pitch",
+      "type": "hinge",
+      "body": "neck_pitch",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 15,
+      "dof_adr": 14,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "head_yaw",
+      "type": "hinge",
+      "body": "yaw_roll_motion",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -2.967059728,
+        2.967059728
+      ],
+      "qpos_adr": 16,
+      "dof_adr": 15,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "head_roll",
+      "type": "hinge",
+      "body": "jaw_soft",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.436332313,
+        0.436332313
+      ],
+      "qpos_adr": 17,
+      "dof_adr": 16,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "right_hip_yaw",
+      "type": "hinge",
+      "body": "bearing_roll",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.523598776,
+        0.436332313
+      ],
+      "qpos_adr": 18,
+      "dof_adr": 17,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "right_hip_roll",
+      "type": "hinge",
+      "body": "hip_l_2",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.383972435,
+        0.383972435
+      ],
+      "qpos_adr": 19,
+      "dof_adr": 18,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "right_hip_pitch",
+      "type": "hinge",
+      "body": "upper_leg_right",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 20,
+      "dof_adr": 19,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "right_knee",
+      "type": "hinge",
+      "body": "leg_2",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 21,
+      "dof_adr": 20,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "right_ankle",
+      "type": "hinge",
+      "body": "ankle_r_v1",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -1.570796327,
+        1.570796327
+      ],
+      "qpos_adr": 22,
+      "dof_adr": 21,
+      "armature": 0.0018,
+      "damping": 0.053,
+      "frictionloss": 0.0048
+    },
+    {
+      "name": "passive_RF_wheel",
+      "type": "hinge",
+      "body": "tire_3",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 23,
+      "dof_adr": 22,
+      "armature": 0.0001,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    },
+    {
+      "name": "passive_RR_wheel",
+      "type": "hinge",
+      "body": "tire_4",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 24,
+      "dof_adr": 23,
+      "armature": 0.0001,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    }
+  ],
+  "actuators": [
+    {
+      "name": "left_hip_yaw",
+      "joint": "left_hip_yaw",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "left_hip_roll",
+      "joint": "left_hip_roll",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "left_hip_pitch",
+      "joint": "left_hip_pitch",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "left_knee",
+      "joint": "left_knee",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "left_ankle",
+      "joint": "left_ankle",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "neck_pitch",
+      "joint": "neck_pitch",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "head_pitch",
+      "joint": "head_pitch",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "head_yaw",
+      "joint": "head_yaw",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "head_roll",
+      "joint": "head_roll",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_hip_yaw",
+      "joint": "right_hip_yaw",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_hip_roll",
+      "joint": "right_hip_roll",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_hip_pitch",
+      "joint": "right_hip_pitch",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_knee",
+      "joint": "right_knee",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_ankle",
+      "joint": "right_ankle",
+      "ctrl_range": [
+        -10.0,
+        10.0
+      ],
+      "force_range": [
+        -0.96,
+        0.96
+      ],
+      "gain_prm": [
+        0.55,
+        0.0,
+        0.0
+      ],
+      "bias_prm": [
+        0.0,
+        -0.55,
+        -0.0
+      ]
+    }
+  ],
+  "bodies": [
+    {
+      "name": "world",
+      "parent": "world",
+      "mass": 0.0,
+      "ipos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "trunk_base",
+      "parent": "world",
+      "mass": 0.199224,
+      "ipos": [
+        -0.0226332,
+        -2.7083e-05,
+        0.00280064
+      ],
+      "iquat": [
+        0.664865717,
+        0.238380702,
+        0.235012065,
+        0.667755605
+      ],
+      "diag_inertia": [
+        0.000145932,
+        0.000140799,
+        9.8527e-05
+      ]
+    },
+    {
+      "name": "yaw2roll",
+      "parent": "trunk_base",
+      "mass": 0.0230406,
+      "ipos": [
+        -0.0,
+        0.00099414,
+        0.0168917
+      ],
+      "iquat": [
+        0.999729712,
+        -0.023248723,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        4.196e-06,
+        3.42e-06,
+        2.324e-06
+      ]
+    },
+    {
+      "name": "hip_l",
+      "parent": "yaw2roll",
+      "mass": 0.00618934,
+      "ipos": [
+        0.014815,
+        1.6e-08,
+        -0.00829992
+      ],
+      "iquat": [
+        0.946939827,
+        -8.25e-07,
+        -0.321410895,
+        -2.8e-07
+      ],
+      "diag_inertia": [
+        1.16e-06,
+        1.158e-06,
+        3.52e-07
+      ]
+    },
+    {
+      "name": "upper_leg_left",
+      "parent": "hip_l",
+      "mass": 0.0482067,
+      "ipos": [
+        0.006766,
+        0.0228838,
+        0.0134531
+      ],
+      "iquat": [
+        0.620817845,
+        0.374278543,
+        -0.583696353,
+        0.365785924
+      ],
+      "diag_inertia": [
+        1.9845e-05,
+        1.9108e-05,
+        8.118e-06
+      ]
+    },
+    {
+      "name": "leg",
+      "parent": "upper_leg_left",
+      "mass": 0.0215844,
+      "ipos": [
+        -0.0,
+        0.0318937,
+        -0.00953505
+      ],
+      "iquat": [
+        0.806473242,
+        0.591270589,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        5.251e-06,
+        4.581e-06,
+        1.914e-06
+      ]
+    },
+    {
+      "name": "ankle_l_v1",
+      "parent": "leg",
+      "mass": 0.02087,
+      "ipos": [
+        -0.00680626,
+        -0.0143677,
+        -0.0151851
+      ],
+      "iquat": [
+        0.456100657,
+        0.509714892,
+        0.499800863,
+        0.531377471
+      ],
+      "diag_inertia": [
+        9.709e-06,
+        8.217e-06,
+        4.833e-06
+      ]
+    },
+    {
+      "name": "tire",
+      "parent": "ankle_l_v1",
+      "mass": 0.00447401,
+      "ipos": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        0.499994031,
+        0.499994031,
+        -0.500005969,
+        0.500005969
+      ],
+      "diag_inertia": [
+        5.37e-07,
+        2.86e-07,
+        2.86e-07
+      ]
+    },
+    {
+      "name": "tire_2",
+      "parent": "ankle_l_v1",
+      "mass": 0.00447401,
+      "ipos": [
+        -0.0,
+        0.0,
+        -0.0
+      ],
+      "iquat": [
+        0.499994031,
+        0.499994031,
+        -0.500005969,
+        0.500005969
+      ],
+      "diag_inertia": [
+        5.37e-07,
+        2.86e-07,
+        2.86e-07
+      ]
+    },
+    {
+      "name": "neck",
+      "parent": "trunk_base",
+      "mass": 0.0368414,
+      "ipos": [
+        0.0,
+        -0.025,
+        0.0141665
+      ],
+      "iquat": [
+        0.707106781,
+        0.707106781,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        1.7292e-05,
+        1.6371e-05,
+        3.127e-06
+      ]
+    },
+    {
+      "name": "neck_pitch",
+      "parent": "neck",
+      "mass": 0.00572,
+      "ipos": [
+        -7e-09,
+        0.0116641,
+        -0.0145
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        1.092e-06,
+        9.67e-07,
+        5.12e-07
+      ]
+    },
+    {
+      "name": "yaw_roll_motion",
+      "parent": "neck_pitch",
+      "mass": 0.0486,
+      "ipos": [
+        -0.000166657,
+        -0.00500964,
+        0.0178065
+      ],
+      "iquat": [
+        0.174482681,
+        0.690172179,
+        -0.019257732,
+        0.702030837
+      ],
+      "diag_inertia": [
+        9.655e-06,
+        8.118e-06,
+        6.888e-06
+      ]
+    },
+    {
+      "name": "jaw_soft",
+      "parent": "yaw_roll_motion",
+      "mass": 0.188766,
+      "ipos": [
+        0.00460523,
+        0.00120047,
+        -0.0324761
+      ],
+      "iquat": [
+        0.999608374,
+        0.020148744,
+        -0.019164326,
+        -0.003139268
+      ],
+      "diag_inertia": [
+        0.000321068,
+        0.000254266,
+        0.000149461
+      ]
+    },
+    {
+      "name": "bearing_roll",
+      "parent": "trunk_base",
+      "mass": 0.0230406,
+      "ipos": [
+        -0.0,
+        0.00099414,
+        0.0168917
+      ],
+      "iquat": [
+        0.999729712,
+        -0.023248723,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        4.196e-06,
+        3.42e-06,
+        2.324e-06
+      ]
+    },
+    {
+      "name": "hip_l_2",
+      "parent": "bearing_roll",
+      "mass": 0.00618934,
+      "ipos": [
+        0.014815,
+        1.6e-08,
+        -0.00829992
+      ],
+      "iquat": [
+        0.946939827,
+        -8.25e-07,
+        -0.321410895,
+        -2.8e-07
+      ],
+      "diag_inertia": [
+        1.16e-06,
+        1.158e-06,
+        3.52e-07
+      ]
+    },
+    {
+      "name": "upper_leg_right",
+      "parent": "hip_l_2",
+      "mass": 0.0482067,
+      "ipos": [
+        -0.006766,
+        0.0228838,
+        0.0134531
+      ],
+      "iquat": [
+        0.365785924,
+        0.583696353,
+        -0.374278543,
+        0.620817845
+      ],
+      "diag_inertia": [
+        1.9845e-05,
+        1.9108e-05,
+        8.118e-06
+      ]
+    },
+    {
+      "name": "leg_2",
+      "parent": "upper_leg_right",
+      "mass": 0.0215844,
+      "ipos": [
+        -0.0318937,
+        -0.0,
+        -0.00953505
+      ],
+      "iquat": [
+        0.570262699,
+        0.418091443,
+        0.418091443,
+        0.570262699
+      ],
+      "diag_inertia": [
+        5.251e-06,
+        4.581e-06,
+        1.914e-06
+      ]
+    },
+    {
+      "name": "ankle_r_v1",
+      "parent": "leg_2",
+      "mass": 0.0208701,
+      "ipos": [
+        0.00680653,
+        -0.0143679,
+        -0.0149822
+      ],
+      "iquat": [
+        0.495063281,
+        0.535457384,
+        0.449195866,
+        0.516159677
+      ],
+      "diag_inertia": [
+        9.719e-06,
+        8.211e-06,
+        4.837e-06
+      ]
+    },
+    {
+      "name": "tire_3",
+      "parent": "ankle_r_v1",
+      "mass": 0.00447401,
+      "ipos": [
+        -0.0,
+        -0.0,
+        0.0
+      ],
+      "iquat": [
+        0.499994031,
+        0.499994031,
+        -0.500005969,
+        0.500005969
+      ],
+      "diag_inertia": [
+        5.37e-07,
+        2.86e-07,
+        2.86e-07
+      ]
+    },
+    {
+      "name": "tire_4",
+      "parent": "ankle_r_v1",
+      "mass": 0.00447401,
+      "ipos": [
+        -0.0,
+        -0.0,
+        0.0
+      ],
+      "iquat": [
+        0.499994031,
+        0.499994031,
+        -0.500005969,
+        0.500005969
+      ],
+      "diag_inertia": [
+        5.37e-07,
+        2.86e-07,
+        2.86e-07
+      ]
+    }
+  ],
+  "sites": [
+    {
+      "name": "imu",
+      "body": "trunk_base",
+      "pos": [
+        -0.021,
+        6.641e-05,
+        -0.0146984
+      ],
+      "quat": [
+        1.0,
+        -0.0,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "left_foot",
+      "body": "ankle_l_v1",
+      "pos": [
+        -0.0,
+        -0.0475,
+        -0.0147
+      ],
+      "quat": [
+        0.0,
+        -0.0,
+        -0.707106781,
+        -0.707106781
+      ]
+    },
+    {
+      "name": "head_camera",
+      "body": "jaw_soft",
+      "pos": [
+        0.0155,
+        -9.1378e-05,
+        -0.0733
+      ],
+      "quat": [
+        0.707106781,
+        0.0,
+        0.707106781,
+        -0.0
+      ]
+    },
+    {
+      "name": "tof",
+      "body": "jaw_soft",
+      "pos": [
+        0.0135,
+        0.0224086,
+        -0.0733
+      ],
+      "quat": [
+        0.707106781,
+        0.0,
+        0.707106781,
+        -0.0
+      ]
+    },
+    {
+      "name": "head_imu",
+      "body": "jaw_soft",
+      "pos": [
+        0.0152323,
+        0.000111069,
+        -0.05106
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        -0.0
+      ]
+    },
+    {
+      "name": "mouth_tip",
+      "body": "jaw_soft",
+      "pos": [
+        -0.00809334,
+        -0.0,
+        -0.0777383
+      ],
+      "quat": [
+        0.704015051,
+        0.0,
+        0.710185052,
+        -0.0
+      ]
+    },
+    {
+      "name": "right_foot",
+      "body": "ankle_r_v1",
+      "pos": [
+        0.0,
+        -0.0475,
+        -0.0144819
+      ],
+      "quat": [
+        0.707106781,
+        -0.707106781,
+        -0.0,
+        0.0
+      ]
+    }
+  ],
+  "geoms": [
+    {
+      "name": "<unnamed_0>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_1>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_2>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_3>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_4>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_5>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_6>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 2,
+      "conaffinity": 2
+    },
+    {
+      "name": "<unnamed_7>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_8>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_9>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_10>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_11>",
+      "body": "trunk_base",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_12>",
+      "body": "yaw2roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_13>",
+      "body": "yaw2roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_14>",
+      "body": "yaw2roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_15>",
+      "body": "yaw2roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_16>",
+      "body": "hip_l",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_17>",
+      "body": "hip_l",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_18>",
+      "body": "hip_l",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_19>",
+      "body": "upper_leg_left",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_20>",
+      "body": "upper_leg_left",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_21>",
+      "body": "upper_leg_left",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_22>",
+      "body": "upper_leg_left",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_23>",
+      "body": "upper_leg_left",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_24>",
+      "body": "leg",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_25>",
+      "body": "leg",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_26>",
+      "body": "leg",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_27>",
+      "body": "ankle_l_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_28>",
+      "body": "ankle_l_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_29>",
+      "body": "ankle_l_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_30>",
+      "body": "tire",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_31>",
+      "body": "tire",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_32>",
+      "body": "tire",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_33>",
+      "body": "tire_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_34>",
+      "body": "tire_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_35>",
+      "body": "tire_2",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_36>",
+      "body": "neck",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_37>",
+      "body": "neck",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_38>",
+      "body": "neck",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_39>",
+      "body": "neck",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_40>",
+      "body": "neck_pitch",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_41>",
+      "body": "neck_pitch",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_42>",
+      "body": "yaw_roll_motion",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_43>",
+      "body": "yaw_roll_motion",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_44>",
+      "body": "yaw_roll_motion",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_45>",
+      "body": "yaw_roll_motion",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_46>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_47>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_48>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_49>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_50>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_51>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_52>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_53>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_54>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_55>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_56>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_57>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_58>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_59>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_60>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_61>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_62>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_63>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_64>",
+      "body": "jaw_soft",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_65>",
+      "body": "bearing_roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_66>",
+      "body": "bearing_roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_67>",
+      "body": "bearing_roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_68>",
+      "body": "bearing_roll",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_69>",
+      "body": "hip_l_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_70>",
+      "body": "hip_l_2",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_71>",
+      "body": "hip_l_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_72>",
+      "body": "upper_leg_right",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_73>",
+      "body": "upper_leg_right",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_74>",
+      "body": "upper_leg_right",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_75>",
+      "body": "upper_leg_right",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_76>",
+      "body": "upper_leg_right",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_77>",
+      "body": "leg_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_78>",
+      "body": "leg_2",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_79>",
+      "body": "leg_2",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_80>",
+      "body": "ankle_r_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_81>",
+      "body": "ankle_r_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_82>",
+      "body": "ankle_r_v1",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_83>",
+      "body": "tire_3",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_84>",
+      "body": "tire_3",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    },
+    {
+      "name": "<unnamed_85>",
+      "body": "tire_3",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_86>",
+      "body": "tire_4",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_87>",
+      "body": "tire_4",
+      "type": 7,
+      "group": 2,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 0,
+      "conaffinity": 0
+    },
+    {
+      "name": "<unnamed_88>",
+      "body": "tire_4",
+      "type": 7,
+      "group": 3,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    }
+  ]
+}

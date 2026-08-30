@@ -1,0 +1,118 @@
+{
+  "model": "ball",
+  "mjcf": "ball.xml",
+  "mujoco_version": "3.8.0",
+  "counts": {
+    "nbody": 2,
+    "njnt": 1,
+    "nq": 7,
+    "nv": 6,
+    "nu": 0,
+    "ngeom": 1,
+    "nsite": 0
+  },
+  "total_mass": 0.015,
+  "servo_joints": [],
+  "passive_joints": [],
+  "joints": [
+    {
+      "name": "ball_free",
+      "type": "free",
+      "body": "ball",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "qpos_adr": 0,
+      "dof_adr": 0,
+      "armature": 0.0,
+      "damping": 0.0,
+      "frictionloss": 0.0
+    }
+  ],
+  "actuators": [],
+  "bodies": [
+    {
+      "name": "world",
+      "parent": "world",
+      "mass": 0.0,
+      "ipos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "ball",
+      "parent": "world",
+      "mass": 0.015,
+      "ipos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "diag_inertia": [
+        1.225e-05,
+        1.225e-05,
+        1.225e-05
+      ]
+    }
+  ],
+  "sites": [],
+  "geoms": [
+    {
+      "name": "ball_geom",
+      "body": "ball",
+      "type": 2,
+      "group": 0,
+      "condim": 3,
+      "priority": 0,
+      "friction": [
+        0.5,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "contype": 1,
+      "conaffinity": 1
+    }
+  ]
+}
