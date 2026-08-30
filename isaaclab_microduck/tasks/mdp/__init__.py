@@ -80,6 +80,7 @@ from .observations import (  # noqa: F401
     projected_gravity_imu_misaligned,
 )
 from .rewards import (  # noqa: F401
+    yaw_rate_error_l1,
     forward_speed_linear,
     feet_clearance,
     feet_swing_height,

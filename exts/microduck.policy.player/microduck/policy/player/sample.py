@@ -40,6 +40,7 @@ class MicroduckPolicySample:
     def __init__(self) -> None:
         self._policy = None
         self._robot = None
+        self._ball = None
         self._prev_action = np.zeros(ACTION_DIM, dtype=np.float32)
         self._command = np.zeros(COMMAND_DIM, dtype=np.float32)
         self._default_joint_pos = np.zeros(ACTION_DIM, dtype=np.float32)
@@ -75,7 +76,40 @@ class MicroduckPolicySample:
             Robot(prim_path=prim_path, name="microduck", position=np.array([0.0, 0.0, SPAWN_HEIGHT]))
         )
         self._home = dict(HOME_JOINT_POS)
+        self._add_ball(world)
         self.status = f"Scene ready ({model}). Load a policy."
+
+    def _add_ball(self, world) -> None:
+        """Spawn the 70 mm / 15 g ball a centimetre in front of the right toe.
+
+        Without it a BallKick policy kicks air: the policy is BALL-BLIND (ball state
+        is critic-only), so it swings on schedule whether or not anything is there,
+        and the demo silently shows nothing happening.
+
+        Offset and mass mirror the task cfg -- at HOME the right foot centres on
+        (0, -0.042) with the toe near x = 0.034, so (0.09, -0.042) leaves the ball
+        clear of the toe rather than interpenetrating it, which the solver would
+        resolve by ejecting the ball and handing out a free "kick".
+        """
+        import numpy as np
+        from isaacsim.core.api.objects import DynamicSphere
+
+        from isaaclab_microduck.tasks.ball_kick.ball_kick_env_cfg import (
+            BALL_MASS,
+            BALL_OFFSET,
+            BALL_RADIUS,
+        )
+
+        self._ball = world.scene.add(
+            DynamicSphere(
+                prim_path="/World/Ball",
+                name="ball",
+                position=np.array([BALL_OFFSET[0], BALL_OFFSET[1], BALL_RADIUS]),
+                radius=BALL_RADIUS,
+                mass=BALL_MASS,
+                color=np.array([0.9, 0.5, 0.1]),
+            )
+        )
 
     def setup_post_load(self) -> None:
         """Cache HOME in the articulation's own joint order.

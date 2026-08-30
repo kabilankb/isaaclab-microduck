@@ -357,10 +357,24 @@ class RewardsCfg:
         weight=6.0,
         params={"command_name": "twist", "std": math.sqrt(0.1)},
     )
+    # Weight 4.0, up from 2.0. A measured policy walked at the commanded 0.4 m/s but
+    # ARCED rather than holding a line -- straightness 0.74, mean |yaw rate|
+    # 1.19 rad/s against a commanded 0.0. Heading was worth a sixth of speed
+    # (2.0 against 12.0 for linear tracking + the dense term), so the policy
+    # optimised speed and ignored where it was pointing.
     track_angular_velocity = RewTerm(
         func=mdp.track_angular_velocity,
-        weight=2.0,
+        weight=4.0,
         params={"command_name": "twist", "std": math.sqrt(0.5)},
+    )
+    # DENSE heading term, the angular counterpart of `forward_speed`. At std
+    # sqrt(0.5) the Gaussian above scores exp(-2.83) ~ 0.06 at 1.19 rad/s of error:
+    # nearly no payment and nearly no gradient. Linear in the error pays for every
+    # bit of correction from anywhere in the range.
+    yaw_tracking = RewTerm(
+        func=mdp.yaw_rate_error_l1,
+        weight=-1.5,  # a COST (returns >= 0); Episode_Reward must log <= 0
+        params={"command_name": "twist"},
     )
     upright = RewTerm(
         func=mdp.upright,

@@ -21,8 +21,10 @@ reloadable = false
 # `--ext-folder` was a dead end (Kit reported "Available packages: (empty)" for both
 # the `=` and space forms). The browser and base-sample extensions ship with Isaac Sim.
 [dependencies]
+# NOT omni.kit.app: it is a core module, always present, and declaring it as an
+# extension dependency fails resolution with "No versions of omni.kit.app that
+# satisfies" -- which reads as if it were missing rather than misdeclared.
 "omni.ui" = {}
-"omni.kit.app" = {}
 "isaacsim.examples.browser" = {}
 "isaacsim.examples.base" = {}
 

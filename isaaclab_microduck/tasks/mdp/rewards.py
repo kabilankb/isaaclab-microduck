@@ -445,3 +445,30 @@ def forward_speed_linear(
     progress = torch.where(cmd >= 0, speed, -speed)  # signed toward the command
     capped = torch.clamp(progress, min=0.0) / cmd.abs().clamp_min(1e-3)
     return torch.where(moving, torch.clamp(capped, max=1.0), torch.zeros_like(capped))
+
+
+def yaw_rate_error_l1(
+    env: "ManagerBasedRLEnv",
+    command_name: str = "twist",
+    max_error: float = 2.0,
+    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+) -> torch.Tensor:
+    """|yaw rate - commanded| in rad/s, clipped. Cost >= 0, so NEGATIVE weight.
+
+    DENSE, for the same reason `forward_speed_linear` is. The Gaussian
+    `track_angular_velocity` uses std = sqrt(0.5), so a robot yawing at 1.19 rad/s
+    under a zero command scores exp(-2.83) ~ 0.06 -- it is paid almost nothing and,
+    worse, told almost nothing about which direction is better. A measured policy sat
+    exactly there: it walked at the commanded 0.4 m/s but arced instead of holding a
+    line (straightness 0.74, mean |yaw rate| 1.19 rad/s against a commanded 0.0).
+
+    Linear in the error, so every bit of heading correction pays from anywhere in the
+    range. Clipped at `max_error` so a tumble cannot dominate the episode -- a 25 cm
+    robot tumbles at 3.5-5.5 rad/s naturally, and an unclipped term would price that
+    far above anything the policy can act on.
+    """
+    asset: "Articulation" = env.scene[asset_cfg.name]
+    yaw_rate = as_torch(asset.data.root_ang_vel_b)[:, 2]
+    cmd = env.command_manager.get_command(command_name)[:, 2]
+    err = torch.abs(torch.nan_to_num(yaw_rate, nan=0.0) - cmd)
+    return torch.clamp(err, max=max_error)
