@@ -29,14 +29,29 @@ def _usd_missing() -> list[str]:
 #:
 #: The eager check is deliberate upstream (a silently stale robot is the worst failure
 #: mode here), so this guards collection rather than weakening it.
+#: Tests that do NOT build a task cfg, and so do not need the USD assets. Keeping this
+#: list explicit means a USD-free test still runs on a fresh clone; a blanket ignore
+#: silently skipped these too, which defeats having them.
+_USD_FREE = {"test_policy_player_extension.py", "test_teleop_keys.py"}
+
 _MISSING = _usd_missing()
-collect_ignore_glob = ["test_*.py"] if _MISSING else []
+collect_ignore_glob = [] if not _MISSING else None
+
+
+def pytest_ignore_collect(collection_path, config):
+    """Ignore only the cfg tests when USD is missing, not every test."""
+    if not _MISSING:
+        return False
+    name = collection_path.name
+    if not name.startswith("test_") or not name.endswith(".py"):
+        return False
+    return name not in _USD_FREE
 
 
 def pytest_report_header(config):
     if _MISSING:
         return (
-            f"USD assets not built ({len(_MISSING)} models missing) - ALL TESTS SKIPPED. "
-            "Run: python scripts/convert_assets.py --force"
+            f"USD assets not built ({len(_MISSING)} models missing) - cfg tests skipped "
+            "(USD-free tests still run). Run: python scripts/convert_assets.py --force"
         )
     return None
