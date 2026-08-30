@@ -23,12 +23,17 @@ reference point, not a spec.
 
 | | |
 |---|---|
+| Machine | Dell Pro Max 16 Plus MB16250 (laptop), firmware 3.1.1 |
 | OS | Ubuntu 24.04.4 LTS, kernel 7.0.0-30-generic, x86_64 |
 | CPU | Intel Core Ultra 9 285HX — 24 cores / 24 threads |
 | RAM | 125 GiB |
 | GPU | NVIDIA RTX PRO 5000 Blackwell Generation Laptop GPU, 24 GB |
 | Driver / CUDA | 595.84 / CUDA 13.2 |
 | Disk | 1.9 TB NVMe |
+
+It is worth stating plainly that this is a **laptop**, not a workstation or a cluster
+node. The 4096-env runs quoted below are what a single mobile Blackwell GPU sustains;
+thermal headroom, not VRAM, is the usual limit on a long run here.
 
 Measured on that machine: **~1.3 s/iteration at 4096 envs headless** for the
 single-robot tasks (~106k env-steps/s), ~1.6-2.4 s/iteration for the two-robot tasks,
