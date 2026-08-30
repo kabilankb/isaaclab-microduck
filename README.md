@@ -2,11 +2,14 @@
 
 Isaac Lab 3.0 (Newton MJWarp) reinforcement-learning environments for **Microduck** — an
 ~800 g, ~25 cm bipedal robot with 14 Dynamixel XL330 servos.
-https://github.com/user-attachments/assets/cf405f24-e72d-4768-9017-d1ea9c43c6e4
 Policies train at 50 Hz, export to ONNX, and are deployed by the runtime in
 [`pollen-robotics/microduck`](https://github.com/pollen-robotics/microduck). This is the
 Isaac Lab port of the mjlab stack that lives alongside it; **mjlab remains the
 behavioural baseline** every ported task is A/B'd against.
+
+
+https://github.com/user-attachments/assets/cf405f24-e72d-4768-9017-d1ea9c43c6e4
+
 
 ## Tasks
 
